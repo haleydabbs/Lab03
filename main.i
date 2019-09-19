@@ -889,7 +889,16 @@ void initialize();
 
 
 
-
+void goToStart();
+void start();
+void goToGame();
+void game();
+void goToPause();
+void pause();
+void goToWin();
+void win();
+void goToLose();
+void lose();
 
 
 enum {START, GAME, PAUSE, WIN, LOSE};
@@ -915,6 +924,23 @@ int main() {
 
 
 
+        switch (state) {
+            case START:
+                start();
+                break;
+            case GAME:
+                game();
+                break;
+            case PAUSE:
+                pause();
+                break;
+            case WIN:
+                win();
+                break;
+            case LOSE:
+                lose();
+                break;
+        }
 
 
     }
@@ -926,5 +952,74 @@ void initialize() {
     (*(unsigned short *)0x4000000) = 3 | (1<<10);
 
 
+    goToStart();
 
+}
+
+
+void goToStart() {
+    fillScreen(((0) | (31)<<5 | (31)<<10));
+    state = START;
+}
+
+void start() {
+    seed++;
+    if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
+        srand(seed);
+        goToGame();
+    }
+}
+
+void goToGame() {
+    fillScreen(0);
+    state = GAME;
+}
+
+void game() {
+    if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
+        goToPause();
+    } else if ((!(~(oldButtons)&((1<<0))) && (~buttons & ((1<<0))))) {
+        goToWin();
+    } else if ((!(~(oldButtons)&((1<<1))) && (~buttons & ((1<<1))))) {
+        goToLose();
+    }
+
+    updateGame();
+    waitForVBlank();
+    drawGame();
+}
+
+void goToPause() {
+    fillScreen(((15) | (15)<<5 | (15)<<10));
+    state = PAUSE;
+}
+
+void pause() {
+    if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
+        goToGame();
+    } else if ((!(~(oldButtons)&((1<<2))) && (~buttons & ((1<<2))))) {
+        goToStart();
+    }
+}
+
+void goToWin() {
+    state = WIN;
+    fillScreen(((0) | (31)<<5 | (0)<<10));
+}
+
+void win() {
+    if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
+        goToStart();
+    }
+}
+
+void goToLose() {
+    state = LOSE;
+    fillScreen(((31) | (0)<<5 | (0)<<10));
+}
+
+void lose() {
+    if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
+        goToStart();
+    }
 }
