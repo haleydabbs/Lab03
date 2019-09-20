@@ -991,7 +991,6 @@ void goToStart() {
 void start() {
     seed++;
     if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
-        srand(seed);
         initGame();
         goToGame();
     }
@@ -999,6 +998,7 @@ void start() {
 
 void goToGame() {
     fillScreen(0);
+    srand(seed);
     state = GAME;
 }
 
@@ -1016,6 +1016,8 @@ void game() {
 
     else if ((!(~(oldButtons)&((1<<1))) && (~buttons & ((1<<1))))) {
         goToLose();
+    } else if (ballsRemaining == 0) {
+        goToWin();
     }
 }
 

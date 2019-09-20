@@ -944,6 +944,9 @@ void updateGame() {
 
 
 
+ for (int i = 0; i < 5; i++) {
+  updateBall(&(balls[i]));
+ }
 
 }
 
@@ -960,12 +963,15 @@ void drawGame() {
  }
 
 
+ for (int i = 0; i < 5; i++) {
+  drawBall(&(balls[i]));
+ }
 
 }
 
 
 void drawBar() {
- drawRect(120, 0, 3, 240, ((31) | (0)<<5 | (0)<<10));
+ drawRect(0, 120, 240, 3, ((31) | (0)<<5 | (0)<<10));
 }
 
 
@@ -1116,7 +1122,20 @@ void updateBall(BALL* b) {
 
   b->row += b->rdel;
   b->col += b->cdel;
-# 219 "game.c"
+
+
+
+
+  for (int i = 0; i < 5; i++) {
+   if (collision(bullets[i].col, bullets[i].row, bullets[i].width, bullets[i].height, b->col, b->row, b->width, b->height)) {
+    bullets[i].active = 0;
+    b->active = 0;
+    ballsRemaining --;
+   }
+  }
+
+
+
  }
 }
 

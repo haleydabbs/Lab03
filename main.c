@@ -83,7 +83,6 @@ void goToStart() {
 void start() {
     seed++;
     if (BUTTON_PRESSED(BUTTON_START)) {
-        srand(seed);
         initGame();
         goToGame();
     }
@@ -91,6 +90,7 @@ void start() {
 
 void goToGame() {
     fillScreen(BLACK);
+    srand(seed);
     state = GAME;
 }
 
@@ -108,6 +108,8 @@ void game() {
     // }
     else if (BUTTON_PRESSED(BUTTON_B)) {
         goToLose();
+    } else if (ballsRemaining == 0) {
+        goToWin();
     }
 }
 

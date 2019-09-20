@@ -36,6 +36,9 @@ void updateGame() {
 
 
 	// TODO 4.0: Update all the balls
+	for (int i = 0; i < BALLCOUNT; i++) {
+		updateBall(&(balls[i]));
+	}
 
 }
 
@@ -52,12 +55,15 @@ void drawGame() {
 	}
 
 	// TODO 4.1: Draw all the balls
+	for (int i = 0; i < BALLCOUNT; i++) {
+		drawBall(&(balls[i]));
+	}
 
 }
 
 // Draws the bar protecting the player
 void drawBar() {
-	drawRect(120, 0, 3, 240, RED);
+	drawRect(0, 120, 240, 3, RED);
 }
 
 // UNCOMMENT 2.2: All the way to the end of drawPlayer
@@ -212,7 +218,13 @@ void updateBall(BALL* b) {
 		// Handle ball-bullet collisions
 		// TODO 5.0: Loop through all the bullets, and if an active bullet is hitting this ball,
 		//            put the bullet back in the pool, and update the score.
-
+		for (int i = 0; i < BULLETCOUNT; i++) {
+			if (collision(bullets[i].col, bullets[i].row, bullets[i].width, bullets[i].height, b->col, b->row, b->width, b->height)) {
+				bullets[i].active = 0;
+				b->active = 0;
+				ballsRemaining --;
+			}
+		}
 
 
 		// TODO 5.1: Back in main.c, transition to win state if ballsRemaining == 0
