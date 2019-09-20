@@ -901,10 +901,10 @@ void initPlayer();
 void updatePlayer();
 void drawPlayer();
 
-
-
-
-
+void initBullets();
+void fireBullet();
+void updateBullet(BULLET *);
+void drawBullet(BULLET *);
 void initBalls();
 void updateBall(BALL *);
 void drawBall(BALL *);
@@ -914,7 +914,7 @@ void drawBall(BALL *);
 
 PLAYER player;
 
-
+BULLET bullets[5];
 BALL balls[5];
 int ballsRemaining;
 
@@ -925,7 +925,7 @@ void initGame() {
  initPlayer();
 
 
-
+ initBullets();
 
  initBalls();
  ballsRemaining = 5;
@@ -938,6 +938,9 @@ void updateGame() {
  updatePlayer();
 
 
+ for (int i = 0; i < 5; i++) {
+  updateBullet(&(bullets[i]));
+ }
 
 
 
@@ -952,7 +955,9 @@ void drawGame() {
  drawBar();
 
 
-
+ for (int i = 0; i < 5; i++) {
+  drawBullet(&(bullets[i]));
+ }
 
 
 
@@ -1000,8 +1005,8 @@ void updatePlayer() {
  if ((!(~(oldButtons)&((1<<0))) && (~buttons & ((1<<0)))) && player.bulletTimer >= 20) {
 
 
-
-
+  fireBullet();
+  player.bulletTimer = 0;
  }
 
  player.bulletTimer++;
@@ -1016,7 +1021,69 @@ void drawPlayer() {
  player.oldRow = player.row;
  player.oldCol = player.col;
 }
-# 149 "game.c"
+
+
+
+void initBullets() {
+
+
+ for (int i = 0; i < 5; i++) {
+  bullets[i].height = 2;
+  bullets[i].width = 1;
+  bullets[i].row = (bullets[i].height * -1);
+  bullets[i].col = 0;
+  bullets[i].oldRow = bullets[i].row;
+  bullets[i].oldCol = bullets[i].col;
+  bullets[i].rdel = -2;
+  bullets[i].color = ((31) | (31)<<5 | (31)<<10);
+  bullets[i].active = 0;
+ }
+
+}
+
+
+void fireBullet() {
+
+
+ for (int i = 0; i < 5; i++) {
+  if (bullets[i].active == 0) {
+   bullets[i].row = player.row;
+   bullets[i].col = player.col + (player.width/2) + (bullets[i].width/2);
+   bullets[i].active = 1;
+   bullets[i].erased = 0;
+   break;
+  }
+ }
+
+}
+
+
+void updateBullet(BULLET* b) {
+
+
+ if (((*b).active == 1) && ((((*b).row) + ((*b).height)) > 0)) {
+  (*b).row += (*b).rdel;
+ } else {
+  (*b).active = 0;
+ }
+
+}
+
+
+void drawBullet(BULLET* b) {
+
+ if(b->active) {
+  drawRect(b->oldCol, b->oldRow, b->width, b->height, 0);
+  drawRect(b->col, b->row, b->width, b->height, b->color);
+ } else if (!b->erased) {
+  drawRect(b->oldCol, b->oldRow, b->width, b->height, 0);
+  b->erased = 1;
+ }
+ b->oldRow = b->row;
+ b->oldCol = b->col;
+}
+
+
 void initBalls() {
 
  for (int i = 0; i < 5; i++) {
@@ -1048,7 +1115,7 @@ void updateBall(BALL* b) {
 
   b->row += b->rdel;
   b->col += b->cdel;
-# 188 "game.c"
+# 218 "game.c"
  }
 }
 

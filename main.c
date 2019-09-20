@@ -102,9 +102,11 @@ void game() {
 
     if (BUTTON_PRESSED(BUTTON_START)) {
         goToPause();
-    } else if (BUTTON_PRESSED(BUTTON_A)) {
-        goToWin();
-    } else if (BUTTON_PRESSED(BUTTON_B)) {
+    }
+    // else if (BUTTON_PRESSED(BUTTON_A)) {
+    //     goToWin();
+    // }
+    else if (BUTTON_PRESSED(BUTTON_B)) {
         goToLose();
     }
 }

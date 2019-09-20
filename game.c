@@ -6,7 +6,7 @@
 // UNCOMMENT 2.1
 PLAYER player;
 // UNCOMMENT 3.0
-// BULLET bullets[BULLETCOUNT];
+BULLET bullets[BULLETCOUNT];
 BALL balls[BALLCOUNT];
 int ballsRemaining;
 
@@ -17,7 +17,7 @@ void initGame() {
 	initPlayer();
 
 	// UNCOMMENT 3.3
-	// initBullets();
+	initBullets();
 
 	initBalls();
 	ballsRemaining = BALLCOUNT;
@@ -30,6 +30,9 @@ void updateGame() {
 	updatePlayer();
 
 	// TODO 3.2: Update all the bullets
+	for (int i = 0; i < BULLETCOUNT; i++) {
+		updateBullet(&(bullets[i]));
+	}
 
 
 	// TODO 4.0: Update all the balls
@@ -44,7 +47,9 @@ void drawGame() {
 	drawBar();
 
 	// TODO 3.5: Draw all the bullets
-
+	for (int i = 0; i < BULLETCOUNT; i++) {
+		drawBullet(&(bullets[i]));
+	}
 
 	// TODO 4.1: Draw all the balls
 
@@ -92,8 +97,8 @@ void updatePlayer() {
 	if (BUTTON_PRESSED(BUTTON_A) && player.bulletTimer >= 20) {
 
 		// UNCOMMENT 3.4
-		// fireBullet();  // TODO 3.5: Back in main.c, comment out the state transition from game to win
-		// player.bulletTimer = 0;
+		fireBullet();  // TODO 3.5: Back in main.c, comment out the state transition from game to win
+		player.bulletTimer = 0;
 	}
 
 	player.bulletTimer++;
@@ -110,40 +115,65 @@ void drawPlayer() {
 }
 
 // UNCOMMENT 3.1: All the way to the bottom of drawBullet
-// // Initialize the pool of bullets
-// void initBullets() {
+// Initialize the pool of bullets
+void initBullets() {
 
-// 	// TODO 3.0: Initialize the data for all of the bullets as per the instructions
+	// TODO 3.0: Initialize the data for all of the bullets as per the instructions
+	for (int i = 0; i < BULLETCOUNT; i++) {
+		bullets[i].height = 2;
+		bullets[i].width = 1;
+		bullets[i].row = (bullets[i].height * -1);
+		bullets[i].col = 0;
+		bullets[i].oldRow = bullets[i].row;
+		bullets[i].oldCol = bullets[i].col;
+		bullets[i].rdel = -2;
+		bullets[i].color = WHITE;
+		bullets[i].active = 0;
+	}
 
-// }
+}
 
-// // Spawn a bullet
-// void fireBullet() {
+// Spawn a bullet
+void fireBullet() {
 
-// 	// TODO 3.3: Find the first inactive bullet, initialize it, and set it active
+	// TODO 3.3: Find the first inactive bullet, initialize it, and set it active
+	for (int i = 0; i < BULLETCOUNT; i++) {
+		if (bullets[i].active == 0) {
+			bullets[i].row = player.row;
+			bullets[i].col = player.col + (player.width/2) + (bullets[i].width/2);
+			bullets[i].active = 1;
+			bullets[i].erased = 0;
+			break;
+		}
+	}
 
-// }
+}
 
-// // Handle every-frame actions of a bullet
-// void updateBullet(BULLET* b) {
+// Handle every-frame actions of a bullet
+void updateBullet(BULLET* b) {
 
-// 	// TODO 3.1: If active, move the bullet upwards, and set it inactive if it goes off the screen
+	// TODO 3.1: If active, move the bullet upwards, and set it inactive if it goes off the screen
+	if (((*b).active == 1) && ((((*b).row) + ((*b).height)) > 0)) {
+		(*b).row += (*b).rdel;
+	} else {
+		(*b).active = 0;
+	}
 
-// }
+}
 
-// // Draw a bullet
-// void drawBullet(BULLET* b) {
+// Draw a bullet
+void drawBullet(BULLET* b) {
 
-// 	if(b->active) {
-// 		drawRect(b->oldCol, b->oldRow, b->width, b->height, BLACK);
-// 		drawRect(b->col, b->row, b->width, b->height, b->color);
-// 	} else if (!b->erased) {
-// 		drawRect(b->oldCol, b->oldRow, b->width, b->height, BLACK);
-// 		b->erased = 1;
-// 	}
-// 	b->oldRow = b->row;
-// 	b->oldCol = b->col;
-// }
+	if(b->active) {
+		drawRect(b->oldCol, b->oldRow, b->width, b->height, BLACK);
+		drawRect(b->col, b->row, b->width, b->height, b->color);
+	} else if (!b->erased) {
+		drawRect(b->oldCol, b->oldRow, b->width, b->height, BLACK);
+		b->erased = 1;
+	}
+	b->oldRow = b->row;
+	b->oldCol = b->col;
+}
 
 // Initialize the balls
 void initBalls() {

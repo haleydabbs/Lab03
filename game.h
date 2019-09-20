@@ -64,10 +64,10 @@ void initPlayer();
 void updatePlayer();
 void drawPlayer();
 // UNCOMMENT 3.2
-// void initBullets();
-// void fireBullet();
-// void updateBullet(BULLET *);
-// void drawBullet(BULLET *);
+void initBullets();
+void fireBullet();
+void updateBullet(BULLET *);
+void drawBullet(BULLET *);
 void initBalls();
 void updateBall(BALL *);
 void drawBall(BALL *);

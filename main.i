@@ -901,10 +901,10 @@ void initPlayer();
 void updatePlayer();
 void drawPlayer();
 
-
-
-
-
+void initBullets();
+void fireBullet();
+void updateBullet(BULLET *);
+void drawBullet(BULLET *);
 void initBalls();
 void updateBall(BALL *);
 void drawBall(BALL *);
@@ -1010,9 +1010,11 @@ void game() {
 
     if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
         goToPause();
-    } else if ((!(~(oldButtons)&((1<<0))) && (~buttons & ((1<<0))))) {
-        goToWin();
-    } else if ((!(~(oldButtons)&((1<<1))) && (~buttons & ((1<<1))))) {
+    }
+
+
+
+    else if ((!(~(oldButtons)&((1<<1))) && (~buttons & ((1<<1))))) {
         goToLose();
     }
 }
