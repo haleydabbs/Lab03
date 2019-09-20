@@ -4,7 +4,7 @@
 
 // Variables
 // UNCOMMENT 2.1
-// PLAYER player;
+PLAYER player;
 // UNCOMMENT 3.0
 // BULLET bullets[BULLETCOUNT];
 BALL balls[BALLCOUNT];
@@ -14,7 +14,7 @@ int ballsRemaining;
 void initGame() {
 
 	// UNCOMMENT 2.4
-	// initPlayer();
+	initPlayer();
 
 	// UNCOMMENT 3.3
 	// initBullets();
@@ -27,7 +27,7 @@ void initGame() {
 void updateGame() {
 
 	// UNCOMMENT 2.5
-	// updatePlayer();
+	updatePlayer();
 
 	// TODO 3.2: Update all the bullets
 
@@ -40,8 +40,8 @@ void updateGame() {
 void drawGame() {
 
 	// UNCOMMENT 2.6
-	// drawPlayer();
-	// drawBar();
+	drawPlayer();
+	drawBar();
 
 	// TODO 3.5: Draw all the bullets
 
@@ -56,57 +56,58 @@ void drawBar() {
 }
 
 // UNCOMMENT 2.2: All the way to the end of drawPlayer
-// // Initialize the player
-// void initPlayer() {
+// Initialize the player
+void initPlayer() {
 
-// 	player.row = 140;
-// 	player.col = 118;
-// 	player.oldRow = player.row;
-// 	player.oldCol = player.col;
-// 	player.cdel = 1;
-// 	player.height = 10;
-// 	player.width = 5;
-// 	player.color = GREEN;
-// 	player.bulletTimer = 20;
+	player.row = 140;
+	player.col = 118;
+	player.oldRow = player.row;
+	player.oldCol = player.col;
+	player.cdel = 1;
+	player.height = 10;
+	player.width = 5;
+	player.color = GREEN;
+	player.bulletTimer = 20;
+	
 
-// }
+}
 
-// // Handle every-frame actions of the player
-// void updatePlayer() {
+// Handle every-frame actions of the player
+void updatePlayer() {
 
-// 	// Move the player
-// 	if (BUTTON_HELD(BUTTON_LEFT)
-// 		&& player.col >= player.cdel) {
+	// Move the player
+	if (BUTTON_HELD(BUTTON_LEFT)
+		&& player.col >= player.cdel) {
 
-// 		player.col -= player.cdel;
+		player.col -= player.cdel;
 
-// 	} else if (BUTTON_HELD(BUTTON_RIGHT)
-// 		&& player.col + player.width - 1 < SCREENWIDTH - player.cdel) {
+	} else if (BUTTON_HELD(BUTTON_RIGHT)
+		&& player.col + player.width - 1 < SCREENWIDTH - player.cdel) {
 
-// 		player.col += player.cdel;
+		player.col += player.cdel;
 
-// 	}
+	}
 
-// 	// Fire bullets
-// 	if (BUTTON_PRESSED(BUTTON_A) && player.bulletTimer >= 20) {
+	// Fire bullets
+	if (BUTTON_PRESSED(BUTTON_A) && player.bulletTimer >= 20) {
 
-// 		// UNCOMMENT 3.4
-// 		// fireBullet();  // TODO 3.5: Back in main.c, comment out the state transition from game to win
-// 		// player.bulletTimer = 0;
-// 	}
+		// UNCOMMENT 3.4
+		// fireBullet();  // TODO 3.5: Back in main.c, comment out the state transition from game to win
+		// player.bulletTimer = 0;
+	}
 
-// 	player.bulletTimer++;
-// }
+	player.bulletTimer++;
+}
 
-// // Draw the player
-// void drawPlayer() {
+// Draw the player
+void drawPlayer() {
 
-// 	drawRect(player.oldCol, player.oldRow, player.width, player.height, BLACK);
-// 	drawRect(player.col, player.row, player.width, player.height, player.color);
+	drawRect(player.oldCol, player.oldRow, player.width, player.height, BLACK);
+	drawRect(player.col, player.row, player.width, player.height, player.color);
 
-// 	player.oldRow = player.row;
-// 	player.oldCol = player.col;
-// }
+	player.oldRow = player.row;
+	player.oldCol = player.col;
+}
 
 // UNCOMMENT 3.1: All the way to the bottom of drawBullet
 // // Initialize the pool of bullets

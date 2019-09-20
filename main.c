@@ -84,6 +84,7 @@ void start() {
     seed++;
     if (BUTTON_PRESSED(BUTTON_START)) {
         srand(seed);
+        initGame();
         goToGame();
     }
 }
@@ -94,6 +95,11 @@ void goToGame() {
 }
 
 void game() {
+
+    updateGame();
+    waitForVBlank();
+    drawGame();
+
     if (BUTTON_PRESSED(BUTTON_START)) {
         goToPause();
     } else if (BUTTON_PRESSED(BUTTON_A)) {
@@ -101,10 +107,6 @@ void game() {
     } else if (BUTTON_PRESSED(BUTTON_B)) {
         goToLose();
     }
-
-    updateGame();
-    waitForVBlank();
-    drawGame();
 }
 
 void goToPause() {

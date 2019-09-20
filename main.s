@@ -98,12 +98,15 @@ start:
 	ldr	r3, .L20+12
 	mov	lr, pc
 	bx	r3
-	mov	r0, r4
 	ldr	r3, .L20+16
 	mov	lr, pc
 	bx	r3
-	mov	r2, #1
+	mov	r0, r4
 	ldr	r3, .L20+20
+	mov	lr, pc
+	bx	r3
+	mov	r2, #1
+	ldr	r3, .L20+24
 	pop	{r4, lr}
 	str	r2, [r3]
 	bx	lr
@@ -114,6 +117,7 @@ start:
 	.word	oldButtons
 	.word	buttons
 	.word	srand
+	.word	initGame
 	.word	fillScreen
 	.word	state
 	.size	start, .-start
@@ -153,39 +157,39 @@ game:
 	@ Function supports interworking.
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
+	push	{r4, lr}
 	ldr	r3, .L43
+	mov	lr, pc
+	bx	r3
+	ldr	r3, .L43+4
+	mov	lr, pc
+	bx	r3
+	ldr	r3, .L43+8
+	mov	lr, pc
+	bx	r3
+	ldr	r3, .L43+12
 	ldrh	r3, [r3]
 	tst	r3, #8
-	push	{r4, lr}
 	beq	.L27
-	ldr	r2, .L43+4
+	ldr	r2, .L43+16
 	ldrh	r2, [r2]
 	tst	r2, #8
 	beq	.L40
 .L27:
 	tst	r3, #1
 	beq	.L29
-	ldr	r2, .L43+4
+	ldr	r2, .L43+16
 	ldrh	r2, [r2]
 	tst	r2, #1
 	beq	.L41
 .L29:
 	tst	r3, #2
-	beq	.L28
-	ldr	r3, .L43+4
+	beq	.L26
+	ldr	r3, .L43+16
 	ldrh	r3, [r3]
 	tst	r3, #2
 	beq	.L42
-.L28:
-	ldr	r3, .L43+8
-	mov	lr, pc
-	bx	r3
-	ldr	r3, .L43+12
-	mov	lr, pc
-	bx	r3
-	ldr	r3, .L43+16
-	mov	lr, pc
-	bx	r3
+.L26:
 	pop	{r4, lr}
 	bx	lr
 .L40:
@@ -195,8 +199,9 @@ game:
 	bx	r3
 	mov	r2, #2
 	ldr	r3, .L43+28
+	pop	{r4, lr}
 	str	r2, [r3]
-	b	.L28
+	bx	lr
 .L41:
 	mov	r1, #3
 	ldr	r2, .L43+28
@@ -205,7 +210,8 @@ game:
 	str	r1, [r2]
 	mov	lr, pc
 	bx	r3
-	b	.L28
+	pop	{r4, lr}
+	bx	lr
 .L42:
 	mov	r1, #4
 	ldr	r2, .L43+28
@@ -214,15 +220,16 @@ game:
 	str	r1, [r2]
 	mov	lr, pc
 	bx	r3
-	b	.L28
+	pop	{r4, lr}
+	bx	lr
 .L44:
 	.align	2
 .L43:
-	.word	oldButtons
-	.word	buttons
 	.word	updateGame
 	.word	waitForVBlank
 	.word	drawGame
+	.word	oldButtons
+	.word	buttons
 	.word	fillScreen
 	.word	15855
 	.word	state

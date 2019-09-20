@@ -837,6 +837,17 @@ int collision(int colA, int rowA, int widthA, int heightA, int colB, int rowB, i
 # 1 "game.h" 1
 
 
+typedef struct {
+ int row;
+ int col;
+ int oldRow;
+ int oldCol;
+ int cdel;
+ int height;
+ int width;
+ unsigned short color;
+ int bulletTimer;
+} PLAYER;
 
 
 
@@ -868,7 +879,14 @@ typedef struct {
  int active;
  int erased;
 } BALL;
-# 42 "game.h"
+
+
+
+
+
+
+
+extern PLAYER player;
 extern BULLET bullets[5];
 extern BALL balls[5];
 extern int ballsRemaining;
@@ -878,7 +896,15 @@ void initGame();
 void updateGame();
 void drawGame();
 void drawBar();
-# 60 "game.h"
+
+void initPlayer();
+void updatePlayer();
+void drawPlayer();
+
+
+
+
+
 void initBalls();
 void updateBall(BALL *);
 void drawBall(BALL *);
@@ -886,7 +912,7 @@ void drawBall(BALL *);
 
 
 
-
+PLAYER player;
 
 
 BALL balls[5];
@@ -896,7 +922,7 @@ int ballsRemaining;
 void initGame() {
 
 
-
+ initPlayer();
 
 
 
@@ -907,19 +933,90 @@ void initGame() {
 
 
 void updateGame() {
-# 37 "game.c"
+
+
+ updatePlayer();
+
+
+
+
+
+
 }
 
 
 void drawGame() {
-# 51 "game.c"
+
+
+ drawPlayer();
+ drawBar();
+
+
+
+
+
+
 }
 
 
 void drawBar() {
  drawRect(120, 0, 3, 240, ((31) | (0)<<5 | (0)<<10));
 }
-# 148 "game.c"
+
+
+
+void initPlayer() {
+
+ player.row = 140;
+ player.col = 118;
+ player.oldRow = player.row;
+ player.oldCol = player.col;
+ player.cdel = 1;
+ player.height = 10;
+ player.width = 5;
+ player.color = ((0) | (31)<<5 | (0)<<10);
+ player.bulletTimer = 20;
+
+
+}
+
+
+void updatePlayer() {
+
+
+ if ((~((*(volatile unsigned short *)0x04000130)) & ((1<<5)))
+  && player.col >= player.cdel) {
+
+  player.col -= player.cdel;
+
+ } else if ((~((*(volatile unsigned short *)0x04000130)) & ((1<<4)))
+  && player.col + player.width - 1 < 240 - player.cdel) {
+
+  player.col += player.cdel;
+
+ }
+
+
+ if ((!(~(oldButtons)&((1<<0))) && (~buttons & ((1<<0)))) && player.bulletTimer >= 20) {
+
+
+
+
+ }
+
+ player.bulletTimer++;
+}
+
+
+void drawPlayer() {
+
+ drawRect(player.oldCol, player.oldRow, player.width, player.height, 0);
+ drawRect(player.col, player.row, player.width, player.height, player.color);
+
+ player.oldRow = player.row;
+ player.oldCol = player.col;
+}
+# 149 "game.c"
 void initBalls() {
 
  for (int i = 0; i < 5; i++) {
@@ -951,7 +1048,7 @@ void updateBall(BALL* b) {
 
   b->row += b->rdel;
   b->col += b->cdel;
-# 187 "game.c"
+# 188 "game.c"
  }
 }
 

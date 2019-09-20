@@ -837,6 +837,17 @@ int collision(int colA, int rowA, int widthA, int heightA, int colB, int rowB, i
 # 1 "game.h" 1
 
 
+typedef struct {
+ int row;
+ int col;
+ int oldRow;
+ int oldCol;
+ int cdel;
+ int height;
+ int width;
+ unsigned short color;
+ int bulletTimer;
+} PLAYER;
 
 
 
@@ -868,7 +879,14 @@ typedef struct {
  int active;
  int erased;
 } BALL;
-# 42 "game.h"
+
+
+
+
+
+
+
+extern PLAYER player;
 extern BULLET bullets[5];
 extern BALL balls[5];
 extern int ballsRemaining;
@@ -878,7 +896,15 @@ void initGame();
 void updateGame();
 void drawGame();
 void drawBar();
-# 60 "game.h"
+
+void initPlayer();
+void updatePlayer();
+void drawPlayer();
+
+
+
+
+
 void initBalls();
 void updateBall(BALL *);
 void drawBall(BALL *);
@@ -966,6 +992,7 @@ void start() {
     seed++;
     if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
         srand(seed);
+        initGame();
         goToGame();
     }
 }
@@ -976,6 +1003,11 @@ void goToGame() {
 }
 
 void game() {
+
+    updateGame();
+    waitForVBlank();
+    drawGame();
+
     if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
         goToPause();
     } else if ((!(~(oldButtons)&((1<<0))) && (~buttons & ((1<<0))))) {
@@ -983,10 +1015,6 @@ void game() {
     } else if ((!(~(oldButtons)&((1<<1))) && (~buttons & ((1<<1))))) {
         goToLose();
     }
-
-    updateGame();
-    waitForVBlank();
-    drawGame();
 }
 
 void goToPause() {

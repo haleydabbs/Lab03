@@ -11,34 +11,8 @@
 	.file	"game.c"
 	.text
 	.align	2
-	.global	updateGame
-	.arch armv4t
-	.syntax unified
-	.arm
-	.fpu softvfp
-	.type	updateGame, %function
-updateGame:
-	@ Function supports interworking.
-	@ args = 0, pretend = 0, frame = 0
-	@ frame_needed = 0, uses_anonymous_args = 0
-	@ link register save eliminated.
-	bx	lr
-	.size	updateGame, .-updateGame
-	.align	2
-	.global	drawGame
-	.syntax unified
-	.arm
-	.fpu softvfp
-	.type	drawGame, %function
-drawGame:
-	@ Function supports interworking.
-	@ args = 0, pretend = 0, frame = 0
-	@ frame_needed = 0, uses_anonymous_args = 0
-	@ link register save eliminated.
-	bx	lr
-	.size	drawGame, .-drawGame
-	.align	2
 	.global	drawBar
+	.arch armv4t
 	.syntax unified
 	.arm
 	.fpu softvfp
@@ -55,18 +29,186 @@ drawBar:
 	mov	r2, #3
 	mov	r1, #0
 	mov	r0, #120
-	ldr	r4, .L6
+	ldr	r4, .L4
 	mov	lr, pc
 	bx	r4
 	add	sp, sp, #8
 	@ sp needed
 	pop	{r4, lr}
 	bx	lr
-.L7:
+.L5:
 	.align	2
-.L6:
+.L4:
 	.word	drawRect
 	.size	drawBar, .-drawBar
+	.align	2
+	.global	initPlayer
+	.syntax unified
+	.arm
+	.fpu softvfp
+	.type	initPlayer, %function
+initPlayer:
+	@ Function supports interworking.
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 0, uses_anonymous_args = 0
+	push	{r4, r5, lr}
+	mov	r1, #140
+	mov	r5, #1
+	mov	r4, #10
+	mov	lr, #5
+	mov	r2, #118
+	mov	ip, #992
+	mov	r0, #20
+	ldr	r3, .L8
+	str	r5, [r3, #16]
+	str	r4, [r3, #20]
+	str	lr, [r3, #24]
+	str	r1, [r3]
+	str	r1, [r3, #8]
+	strh	ip, [r3, #28]	@ movhi
+	str	r0, [r3, #32]
+	str	r2, [r3, #4]
+	str	r2, [r3, #12]
+	pop	{r4, r5, lr}
+	bx	lr
+.L9:
+	.align	2
+.L8:
+	.word	player
+	.size	initPlayer, .-initPlayer
+	.align	2
+	.global	updatePlayer
+	.syntax unified
+	.arm
+	.fpu softvfp
+	.type	updatePlayer, %function
+updatePlayer:
+	@ Function supports interworking.
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 0, uses_anonymous_args = 0
+	@ link register save eliminated.
+	ldr	r3, .L15
+	ldrh	r3, [r3, #48]
+	tst	r3, #32
+	ldr	r3, .L15+4
+	bne	.L11
+	ldr	r2, [r3, #4]
+	ldr	r1, [r3, #16]
+	cmp	r2, r1
+	subge	r2, r2, r1
+	strge	r2, [r3, #4]
+	bge	.L12
+.L11:
+	ldr	r2, .L15
+	ldrh	r2, [r2, #48]
+	tst	r2, #16
+	bne	.L12
+	ldr	r1, [r3, #4]
+	ldr	r0, [r3, #16]
+	ldr	r2, [r3, #24]
+	rsb	ip, r0, #240
+	add	r2, r1, r2
+	cmp	r2, ip
+	addle	r1, r1, r0
+	strle	r1, [r3, #4]
+.L12:
+	ldr	r2, [r3, #32]
+	add	r2, r2, #1
+	str	r2, [r3, #32]
+	bx	lr
+.L16:
+	.align	2
+.L15:
+	.word	67109120
+	.word	player
+	.size	updatePlayer, .-updatePlayer
+	.align	2
+	.global	updateGame
+	.syntax unified
+	.arm
+	.fpu softvfp
+	.type	updateGame, %function
+updateGame:
+	@ Function supports interworking.
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 0, uses_anonymous_args = 0
+	@ link register save eliminated.
+	b	updatePlayer
+	.size	updateGame, .-updateGame
+	.align	2
+	.global	drawPlayer
+	.syntax unified
+	.arm
+	.fpu softvfp
+	.type	drawPlayer, %function
+drawPlayer:
+	@ Function supports interworking.
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 0, uses_anonymous_args = 0
+	mov	r3, #0
+	push	{r4, r5, lr}
+	ldr	r4, .L20
+	sub	sp, sp, #12
+	str	r3, [sp]
+	ldr	r2, [r4, #24]
+	ldr	r3, [r4, #20]
+	ldr	r1, [r4, #8]
+	ldr	r0, [r4, #12]
+	ldr	r5, .L20+4
+	mov	lr, pc
+	bx	r5
+	ldrh	r2, [r4, #28]
+	ldr	r3, [r4, #20]
+	str	r2, [sp]
+	ldr	r1, [r4]
+	ldr	r2, [r4, #24]
+	ldr	r0, [r4, #4]
+	mov	lr, pc
+	bx	r5
+	ldm	r4, {r2, r3}
+	str	r2, [r4, #8]
+	str	r3, [r4, #12]
+	add	sp, sp, #12
+	@ sp needed
+	pop	{r4, r5, lr}
+	bx	lr
+.L21:
+	.align	2
+.L20:
+	.word	player
+	.word	drawRect
+	.size	drawPlayer, .-drawPlayer
+	.align	2
+	.global	drawGame
+	.syntax unified
+	.arm
+	.fpu softvfp
+	.type	drawGame, %function
+drawGame:
+	@ Function supports interworking.
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 0, uses_anonymous_args = 0
+	push	{r4, lr}
+	sub	sp, sp, #8
+	bl	drawPlayer
+	mov	r2, #31
+	mov	r3, #240
+	str	r2, [sp]
+	mov	r1, #0
+	mov	r2, #3
+	mov	r0, #120
+	ldr	r4, .L24
+	mov	lr, pc
+	bx	r4
+	add	sp, sp, #8
+	@ sp needed
+	pop	{r4, lr}
+	bx	lr
+.L25:
+	.align	2
+.L24:
+	.word	drawRect
+	.size	drawGame, .-drawGame
 	.align	2
 	.global	initBalls
 	.syntax unified
@@ -79,12 +221,12 @@ initBalls:
 	@ frame_needed = 0, uses_anonymous_args = 0
 	push	{r4, r5, r6, r7, r8, r9, r10, lr}
 	mov	r9, #10
-	ldr	r4, .L12
-	ldr	r5, .L12+4
-	ldr	r8, .L12+8
-	ldr	r7, .L12+12
+	ldr	r4, .L30
+	ldr	r5, .L30+4
+	ldr	r8, .L30+8
+	ldr	r7, .L30+12
 	add	r6, r4, #220
-.L9:
+.L27:
 	str	r9, [r4, #24]
 	str	r9, [r4, #28]
 	mov	lr, pc
@@ -118,12 +260,12 @@ initBalls:
 	str	r3, [r4, #8]
 	add	r4, r4, #44
 	cmp	r4, r6
-	bne	.L9
+	bne	.L27
 	pop	{r4, r5, r6, r7, r8, r9, r10, lr}
 	bx	lr
-.L13:
+.L31:
 	.align	2
-.L12:
+.L30:
 	.word	balls
 	.word	rand
 	.word	156180629
@@ -139,16 +281,33 @@ initGame:
 	@ Function supports interworking.
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
-	push	{r4, lr}
+	push	{r4, r5, r6, lr}
+	mov	r1, #140
+	mov	lr, #10
+	mov	r2, #118
+	mov	r4, #5
+	mov	r5, #1
+	mov	ip, #992
+	mov	r0, #20
+	ldr	r3, .L34
+	str	r5, [r3, #16]
+	str	lr, [r3, #20]
+	str	r4, [r3, #24]
+	str	r1, [r3]
+	str	r1, [r3, #8]
+	strh	ip, [r3, #28]	@ movhi
+	str	r0, [r3, #32]
+	str	r2, [r3, #4]
+	str	r2, [r3, #12]
 	bl	initBalls
-	mov	r2, #5
-	ldr	r3, .L16
-	pop	{r4, lr}
-	str	r2, [r3]
+	ldr	r3, .L34+4
+	str	r4, [r3]
+	pop	{r4, r5, r6, lr}
 	bx	lr
-.L17:
+.L35:
 	.align	2
-.L16:
+.L34:
+	.word	player
 	.word	ballsRemaining
 	.size	initGame, .-initGame
 	.align	2
@@ -167,19 +326,19 @@ updateBall:
 	ldr	r2, [r0]
 	cmp	r2, #0
 	ldr	ip, [r0, #16]
-	ble	.L20
+	ble	.L38
 	ldr	r3, [r0, #24]
 	add	r3, r2, r3
 	cmp	r3, #120
-	ble	.L21
-.L20:
+	ble	.L39
+.L38:
 	rsb	ip, ip, #0
 	str	ip, [r0, #16]
-.L21:
+.L39:
 	ldr	r3, [r0, #4]
 	cmp	r3, #0
 	ldr	r1, [r0, #20]
-	ble	.L29
+	ble	.L47
 	str	lr, [sp, #-4]!
 	ldr	lr, [r0, #28]
 	add	lr, r3, lr
@@ -191,7 +350,7 @@ updateBall:
 	strgt	r1, [r0, #20]
 	ldr	lr, [sp], #4
 	bx	lr
-.L29:
+.L47:
 	rsb	r1, r1, #0
 	add	r2, r2, ip
 	add	r3, r3, r1
@@ -214,11 +373,11 @@ drawBall:
 	cmp	r3, #0
 	mov	r4, r0
 	sub	sp, sp, #12
-	bne	.L37
+	bne	.L55
 	ldr	r3, [r0, #40]
 	cmp	r3, #0
-	beq	.L38
-.L35:
+	beq	.L56
+.L53:
 	ldm	r4, {r2, r3}
 	str	r2, [r4, #8]
 	str	r3, [r4, #12]
@@ -226,9 +385,9 @@ drawBall:
 	@ sp needed
 	pop	{r4, r5, lr}
 	bx	lr
-.L38:
+.L56:
 	str	r3, [sp]
-	ldr	r5, .L39
+	ldr	r5, .L57
 	ldr	r3, [r0, #24]
 	ldr	r2, [r0, #28]
 	ldr	r1, [r0, #8]
@@ -237,12 +396,12 @@ drawBall:
 	bx	r5
 	mov	r3, #1
 	str	r3, [r4, #40]
-	b	.L35
-.L37:
+	b	.L53
+.L55:
 	mov	r2, #0
 	ldr	r3, [r0, #24]
 	str	r2, [sp]
-	ldr	r5, .L39
+	ldr	r5, .L57
 	ldr	r2, [r0, #28]
 	ldr	r1, [r0, #8]
 	ldr	r0, [r0, #12]
@@ -256,12 +415,13 @@ drawBall:
 	ldr	r0, [r4, #4]
 	mov	lr, pc
 	bx	r5
-	b	.L35
-.L40:
+	b	.L53
+.L58:
 	.align	2
-.L39:
+.L57:
 	.word	drawRect
 	.size	drawBall, .-drawBall
 	.comm	ballsRemaining,4,4
 	.comm	balls,220,4
+	.comm	player,36,4
 	.ident	"GCC: (devkitARM release 53) 9.1.0"
