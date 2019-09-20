@@ -1006,6 +1006,7 @@ void updatePlayer() {
 
 
   fireBullet();
+
   player.bulletTimer = 0;
  }
 
@@ -1061,10 +1062,10 @@ void fireBullet() {
 void updateBullet(BULLET* b) {
 
 
- if (((*b).active == 1) && ((((*b).row) + ((*b).height)) > 0)) {
-  (*b).row += (*b).rdel;
+ if ((b->active) && (((b->row) + (b->height) > 0))) {
+  b->row += b->rdel;
  } else {
-  (*b).active = 0;
+  b->active = 0;
  }
 
 }
@@ -1115,7 +1116,7 @@ void updateBall(BALL* b) {
 
   b->row += b->rdel;
   b->col += b->cdel;
-# 218 "game.c"
+# 219 "game.c"
  }
 }
 

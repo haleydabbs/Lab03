@@ -97,7 +97,8 @@ void updatePlayer() {
 	if (BUTTON_PRESSED(BUTTON_A) && player.bulletTimer >= 20) {
 
 		// UNCOMMENT 3.4
-		fireBullet();  // TODO 3.5: Back in main.c, comment out the state transition from game to win
+		fireBullet(); 
+		// TODO 3.5: Back in main.c, comment out the state transition from game to win
 		player.bulletTimer = 0;
 	}
 
@@ -153,10 +154,10 @@ void fireBullet() {
 void updateBullet(BULLET* b) {
 
 	// TODO 3.1: If active, move the bullet upwards, and set it inactive if it goes off the screen
-	if (((*b).active == 1) && ((((*b).row) + ((*b).height)) > 0)) {
-		(*b).row += (*b).rdel;
+	if ((b->active) && (((b->row) + (b->height) > 0))) {
+		b->row += b->rdel;
 	} else {
-		(*b).active = 0;
+		b->active = 0;
 	}
 
 }

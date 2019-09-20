@@ -284,34 +284,33 @@ updateGame:
 	@ frame_needed = 0, uses_anonymous_args = 0
 	push	{r4, lr}
 	bl	updatePlayer
-	mov	r0, #0
-	ldr	r3, .L53
-	add	r1, r3, #200
+	mov	ip, #0
+	ldr	r3, .L55
+	add	r0, r3, #200
 .L49:
 	ldr	r2, [r3, #32]
-	cmp	r2, #1
-	beq	.L52
-.L47:
-	str	r0, [r3, #32]
-.L48:
-	add	r3, r3, #40
-	cmp	r3, r1
-	bne	.L49
-	pop	{r4, lr}
-	bx	lr
-.L52:
-	ldr	ip, [r3]
+	cmp	r2, #0
+	beq	.L47
+	ldr	r1, [r3]
 	ldr	r2, [r3, #20]
-	add	r2, ip, r2
+	add	r2, r1, r2
 	cmp	r2, #0
 	ble	.L47
 	ldr	r2, [r3, #16]
-	add	ip, r2, ip
-	str	ip, [r3]
+	add	r1, r2, r1
+	str	r1, [r3]
+.L48:
+	add	r3, r3, #40
+	cmp	r3, r0
+	bne	.L49
+	pop	{r4, lr}
+	bx	lr
+.L47:
+	str	ip, [r3, #32]
 	b	.L48
-.L54:
+.L56:
 	.align	2
-.L53:
+.L55:
 	.word	bullets
 	.size	updateGame, .-updateGame
 	.align	2
@@ -326,21 +325,20 @@ updateBullet:
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
 	ldr	r3, [r0, #32]
-	cmp	r3, #1
+	cmp	r3, #0
 	beq	.L58
-.L56:
-	mov	r3, #0
-	str	r3, [r0, #32]
-	bx	lr
-.L58:
 	ldr	r2, [r0]
 	ldr	r3, [r0, #20]
 	add	r3, r2, r3
 	cmp	r3, #0
-	ble	.L56
+	ble	.L58
 	ldr	r3, [r0, #16]
 	add	r2, r3, r2
 	str	r2, [r0]
+	bx	lr
+.L58:
+	mov	r3, #0
+	str	r3, [r0, #32]
 	bx	lr
 	.size	updateBullet, .-updateBullet
 	.align	2
@@ -358,11 +356,11 @@ drawBullet:
 	cmp	r3, #0
 	mov	r4, r0
 	sub	sp, sp, #12
-	bne	.L63
+	bne	.L67
 	ldr	r3, [r0, #36]
 	cmp	r3, #0
-	beq	.L64
-.L61:
+	beq	.L68
+.L65:
 	ldm	r4, {r2, r3}
 	str	r2, [r4, #8]
 	str	r3, [r4, #12]
@@ -370,9 +368,9 @@ drawBullet:
 	@ sp needed
 	pop	{r4, r5, lr}
 	bx	lr
-.L64:
+.L68:
 	str	r3, [sp]
-	ldr	r5, .L65
+	ldr	r5, .L69
 	ldr	r3, [r0, #20]
 	ldr	r2, [r0, #24]
 	ldr	r1, [r0, #8]
@@ -381,12 +379,12 @@ drawBullet:
 	bx	r5
 	mov	r3, #1
 	str	r3, [r4, #36]
-	b	.L61
-.L63:
+	b	.L65
+.L67:
 	mov	r2, #0
 	ldr	r3, [r0, #20]
 	str	r2, [sp]
-	ldr	r5, .L65
+	ldr	r5, .L69
 	ldr	r2, [r0, #24]
 	ldr	r1, [r0, #8]
 	ldr	r0, [r0, #12]
@@ -400,10 +398,10 @@ drawBullet:
 	ldr	r0, [r4, #4]
 	mov	lr, pc
 	bx	r5
-	b	.L61
-.L66:
+	b	.L65
+.L70:
 	.align	2
-.L65:
+.L69:
 	.word	drawRect
 	.size	drawBullet, .-drawBullet
 	.align	2
@@ -420,13 +418,13 @@ drawGame:
 	sub	sp, sp, #12
 	bl	drawPlayer
 	mov	r3, #31
-	ldr	r4, .L69
+	ldr	r4, .L73
 	mov	r2, #3
 	mov	r1, #0
 	str	r3, [sp]
 	mov	r0, #120
 	mov	r3, #240
-	ldr	r5, .L69+4
+	ldr	r5, .L73+4
 	mov	lr, pc
 	bx	r5
 	mov	r0, r4
@@ -442,9 +440,9 @@ drawGame:
 	@ sp needed
 	pop	{r4, r5, lr}
 	b	drawBullet
-.L70:
+.L74:
 	.align	2
-.L69:
+.L73:
 	.word	bullets
 	.word	drawRect
 	.size	drawGame, .-drawGame
@@ -460,12 +458,12 @@ initBalls:
 	@ frame_needed = 0, uses_anonymous_args = 0
 	push	{r4, r5, r6, r7, r8, r9, r10, lr}
 	mov	r9, #10
-	ldr	r4, .L75
-	ldr	r5, .L75+4
-	ldr	r8, .L75+8
-	ldr	r7, .L75+12
+	ldr	r4, .L79
+	ldr	r5, .L79+4
+	ldr	r8, .L79+8
+	ldr	r7, .L79+12
 	add	r6, r4, #220
-.L72:
+.L76:
 	str	r9, [r4, #24]
 	str	r9, [r4, #28]
 	mov	lr, pc
@@ -499,12 +497,12 @@ initBalls:
 	str	r3, [r4, #8]
 	add	r4, r4, #44
 	cmp	r4, r6
-	bne	.L72
+	bne	.L76
 	pop	{r4, r5, r6, r7, r8, r9, r10, lr}
 	bx	lr
-.L76:
+.L80:
 	.align	2
-.L75:
+.L79:
 	.word	balls
 	.word	rand
 	.word	156180629
@@ -533,10 +531,10 @@ initGame:
 	mvn	r1, #1
 	mov	r2, #0
 	mvn	ip, #32768
-	ldr	r0, .L81
+	ldr	r0, .L85
 	str	r3, [r0]
 	str	r3, [r0, #8]
-	ldr	r3, .L81+4
+	ldr	r3, .L85+4
 	str	r6, [r0, #16]
 	str	r10, [r0, #20]
 	str	r9, [r0, #24]
@@ -545,7 +543,7 @@ initGame:
 	str	r5, [r0, #4]
 	str	r5, [r0, #12]
 	add	r0, r3, #200
-.L78:
+.L82:
 	str	lr, [r3, #20]
 	str	r4, [r3, #24]
 	str	r1, [r3, #8]
@@ -556,16 +554,16 @@ initGame:
 	stm	r3, {r1, r2}
 	add	r3, r3, #40
 	cmp	r3, r0
-	bne	.L78
+	bne	.L82
 	bl	initBalls
 	mov	r2, #5
-	ldr	r3, .L81+8
+	ldr	r3, .L85+8
 	pop	{r4, r5, r6, r7, r8, r9, r10, lr}
 	str	r2, [r3]
 	bx	lr
-.L82:
+.L86:
 	.align	2
-.L81:
+.L85:
 	.word	player
 	.word	bullets
 	.word	ballsRemaining
@@ -586,19 +584,19 @@ updateBall:
 	ldr	r2, [r0]
 	cmp	r2, #0
 	ldr	ip, [r0, #16]
-	ble	.L85
+	ble	.L89
 	ldr	r3, [r0, #24]
 	add	r3, r2, r3
 	cmp	r3, #120
-	ble	.L86
-.L85:
+	ble	.L90
+.L89:
 	rsb	ip, ip, #0
 	str	ip, [r0, #16]
-.L86:
+.L90:
 	ldr	r3, [r0, #4]
 	cmp	r3, #0
 	ldr	r1, [r0, #20]
-	ble	.L94
+	ble	.L98
 	str	lr, [sp, #-4]!
 	ldr	lr, [r0, #28]
 	add	lr, r3, lr
@@ -610,7 +608,7 @@ updateBall:
 	strgt	r1, [r0, #20]
 	ldr	lr, [sp], #4
 	bx	lr
-.L94:
+.L98:
 	rsb	r1, r1, #0
 	add	r2, r2, ip
 	add	r3, r3, r1
@@ -633,11 +631,11 @@ drawBall:
 	cmp	r3, #0
 	mov	r4, r0
 	sub	sp, sp, #12
-	bne	.L102
+	bne	.L106
 	ldr	r3, [r0, #40]
 	cmp	r3, #0
-	beq	.L103
-.L100:
+	beq	.L107
+.L104:
 	ldm	r4, {r2, r3}
 	str	r2, [r4, #8]
 	str	r3, [r4, #12]
@@ -645,9 +643,9 @@ drawBall:
 	@ sp needed
 	pop	{r4, r5, lr}
 	bx	lr
-.L103:
+.L107:
 	str	r3, [sp]
-	ldr	r5, .L104
+	ldr	r5, .L108
 	ldr	r3, [r0, #24]
 	ldr	r2, [r0, #28]
 	ldr	r1, [r0, #8]
@@ -656,12 +654,12 @@ drawBall:
 	bx	r5
 	mov	r3, #1
 	str	r3, [r4, #40]
-	b	.L100
-.L102:
+	b	.L104
+.L106:
 	mov	r2, #0
 	ldr	r3, [r0, #24]
 	str	r2, [sp]
-	ldr	r5, .L104
+	ldr	r5, .L108
 	ldr	r2, [r0, #28]
 	ldr	r1, [r0, #8]
 	ldr	r0, [r0, #12]
@@ -675,10 +673,10 @@ drawBall:
 	ldr	r0, [r4, #4]
 	mov	lr, pc
 	bx	r5
-	b	.L100
-.L105:
+	b	.L104
+.L109:
 	.align	2
-.L104:
+.L108:
 	.word	drawRect
 	.size	drawBall, .-drawBall
 	.comm	ballsRemaining,4,4
