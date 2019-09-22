@@ -936,7 +936,7 @@ unsigned short buttons;
 unsigned short oldButtons;
 
 
-int seed;
+int seed = 0;
 
 int main() {
 
@@ -991,9 +991,11 @@ void goToStart() {
 void start() {
     seed++;
     if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
-        srand(0);
-        initGame();
+
+
+
         srand(seed);
+        initGame();
         goToGame();
     }
 }

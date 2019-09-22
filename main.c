@@ -28,7 +28,7 @@ unsigned short buttons;
 unsigned short oldButtons;
 
 // Random Seed
-int seed;
+int seed = 0;
 
 int main() {
 
