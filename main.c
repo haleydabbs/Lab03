@@ -83,6 +83,10 @@ void goToStart() {
 void start() {
     seed++;
     if (BUTTON_PRESSED(BUTTON_START)) {
+        // If you wanted the balls to start at the same position every time,
+        // you would use srand(0) or a set seed everytime
+        //srand(0);
+        srand(seed);
         initGame();
         goToGame();
     }
@@ -90,7 +94,6 @@ void start() {
 
 void goToGame() {
     fillScreen(BLACK);
-    srand(seed);
     state = GAME;
 }
 

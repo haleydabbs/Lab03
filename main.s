@@ -70,6 +70,63 @@ goToStart:
 	.word	state
 	.size	goToStart, .-goToStart
 	.align	2
+	.global	start
+	.syntax unified
+	.arm
+	.fpu softvfp
+	.type	start, %function
+start:
+	@ Function supports interworking.
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 0, uses_anonymous_args = 0
+	push	{r4, r5, r6, lr}
+	ldr	r2, .L17
+	ldr	r4, .L17+4
+	ldrh	r2, [r2]
+	ldr	r3, [r4]
+	tst	r2, #8
+	add	r3, r3, #1
+	str	r3, [r4]
+	beq	.L10
+	ldr	r3, .L17+8
+	ldrh	r0, [r3]
+	ands	r5, r0, #8
+	beq	.L16
+.L10:
+	pop	{r4, r5, r6, lr}
+	bx	lr
+.L16:
+	mov	r0, r5
+	ldr	r6, .L17+12
+	mov	lr, pc
+	bx	r6
+	ldr	r3, .L17+16
+	mov	lr, pc
+	bx	r3
+	ldr	r0, [r4]
+	mov	lr, pc
+	bx	r6
+	mov	r0, r5
+	ldr	r3, .L17+20
+	mov	lr, pc
+	bx	r3
+	mov	r2, #1
+	ldr	r3, .L17+24
+	pop	{r4, r5, r6, lr}
+	str	r2, [r3]
+	bx	lr
+.L18:
+	.align	2
+.L17:
+	.word	oldButtons
+	.word	seed
+	.word	buttons
+	.word	srand
+	.word	initGame
+	.word	fillScreen
+	.word	state
+	.size	start, .-start
+	.align	2
 	.global	goToGame
 	.syntax unified
 	.arm
@@ -80,79 +137,21 @@ goToGame:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	push	{r4, lr}
+	ldr	r3, .L21
 	mov	r0, #0
-	ldr	r3, .L12
-	mov	lr, pc
-	bx	r3
-	ldr	r2, .L12+4
-	ldr	r3, .L12+8
-	ldr	r0, [r2]
 	mov	lr, pc
 	bx	r3
 	mov	r2, #1
-	ldr	r3, .L12+12
+	ldr	r3, .L21+4
 	pop	{r4, lr}
 	str	r2, [r3]
 	bx	lr
-.L13:
+.L22:
 	.align	2
-.L12:
+.L21:
 	.word	fillScreen
-	.word	seed
-	.word	srand
 	.word	state
 	.size	goToGame, .-goToGame
-	.align	2
-	.syntax unified
-	.arm
-	.fpu softvfp
-	.type	start.part.0, %function
-start.part.0:
-	@ Function supports interworking.
-	@ args = 0, pretend = 0, frame = 0
-	@ frame_needed = 0, uses_anonymous_args = 0
-	ldr	r3, .L19
-	ldrh	r3, [r3]
-	tst	r3, #8
-	bxne	lr
-	push	{r4, lr}
-	ldr	r3, .L19+4
-	mov	lr, pc
-	bx	r3
-	pop	{r4, lr}
-	b	goToGame
-.L20:
-	.align	2
-.L19:
-	.word	buttons
-	.word	initGame
-	.size	start.part.0, .-start.part.0
-	.align	2
-	.global	start
-	.syntax unified
-	.arm
-	.fpu softvfp
-	.type	start, %function
-start:
-	@ Function supports interworking.
-	@ args = 0, pretend = 0, frame = 0
-	@ frame_needed = 0, uses_anonymous_args = 0
-	@ link register save eliminated.
-	ldr	r2, .L23
-	ldr	r1, .L23+4
-	ldr	r3, [r2]
-	ldrh	r1, [r1]
-	add	r3, r3, #1
-	tst	r1, #8
-	str	r3, [r2]
-	bxeq	lr
-	b	start.part.0
-.L24:
-	.align	2
-.L23:
-	.word	seed
-	.word	oldButtons
-	.size	start, .-start
 	.align	2
 	.global	game
 	.syntax unified
@@ -164,70 +163,70 @@ game:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	push	{r4, lr}
-	ldr	r3, .L39
+	ldr	r3, .L37
 	mov	lr, pc
 	bx	r3
-	ldr	r3, .L39+4
+	ldr	r3, .L37+4
 	mov	lr, pc
 	bx	r3
-	ldr	r3, .L39+8
+	ldr	r3, .L37+8
 	mov	lr, pc
 	bx	r3
-	ldr	r3, .L39+12
+	ldr	r3, .L37+12
 	ldrh	r3, [r3]
 	tst	r3, #8
-	beq	.L26
-	ldr	r2, .L39+16
+	beq	.L24
+	ldr	r2, .L37+16
 	ldrh	r2, [r2]
 	tst	r2, #8
-	beq	.L36
-.L26:
+	beq	.L34
+.L24:
 	tst	r3, #2
-	beq	.L28
-	ldr	r3, .L39+16
+	beq	.L26
+	ldr	r3, .L37+16
 	ldrh	r3, [r3]
 	tst	r3, #2
-	beq	.L37
-.L28:
-	ldr	r3, .L39+20
+	beq	.L35
+.L26:
+	ldr	r3, .L37+20
 	ldr	r3, [r3]
 	cmp	r3, #0
-	beq	.L38
-	pop	{r4, lr}
-	bx	lr
-.L38:
-	mov	r1, #3
-	ldr	r2, .L39+24
-	mov	r0, #992
-	ldr	r3, .L39+28
-	str	r1, [r2]
-	mov	lr, pc
-	bx	r3
+	beq	.L36
 	pop	{r4, lr}
 	bx	lr
 .L36:
-	ldr	r3, .L39+28
-	ldr	r0, .L39+32
-	mov	lr, pc
-	bx	r3
-	mov	r2, #2
-	ldr	r3, .L39+24
-	pop	{r4, lr}
-	str	r2, [r3]
-	bx	lr
-.L37:
-	mov	r1, #4
-	ldr	r2, .L39+24
-	mov	r0, #31
-	ldr	r3, .L39+28
+	mov	r1, #3
+	ldr	r2, .L37+24
+	mov	r0, #992
+	ldr	r3, .L37+28
 	str	r1, [r2]
 	mov	lr, pc
 	bx	r3
 	pop	{r4, lr}
 	bx	lr
-.L40:
+.L34:
+	ldr	r3, .L37+28
+	ldr	r0, .L37+32
+	mov	lr, pc
+	bx	r3
+	mov	r2, #2
+	ldr	r3, .L37+24
+	pop	{r4, lr}
+	str	r2, [r3]
+	bx	lr
+.L35:
+	mov	r1, #4
+	ldr	r2, .L37+24
+	mov	r0, #31
+	ldr	r3, .L37+28
+	str	r1, [r2]
+	mov	lr, pc
+	bx	r3
+	pop	{r4, lr}
+	bx	lr
+.L38:
 	.align	2
-.L39:
+.L37:
 	.word	updateGame
 	.word	waitForVBlank
 	.word	drawGame
@@ -249,18 +248,18 @@ goToPause:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	push	{r4, lr}
-	ldr	r3, .L43
-	ldr	r0, .L43+4
+	ldr	r3, .L41
+	ldr	r0, .L41+4
 	mov	lr, pc
 	bx	r3
 	mov	r2, #2
-	ldr	r3, .L43+8
+	ldr	r3, .L41+8
 	pop	{r4, lr}
 	str	r2, [r3]
 	bx	lr
-.L44:
+.L42:
 	.align	2
-.L43:
+.L41:
 	.word	fillScreen
 	.word	15855
 	.word	state
@@ -275,43 +274,51 @@ pause:
 	@ Function supports interworking.
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
-	ldr	r3, .L60
+	ldr	r3, .L55
 	ldrh	r3, [r3]
 	tst	r3, #8
-	beq	.L46
-	ldr	r2, .L60+4
-	ldrh	r2, [r2]
-	tst	r2, #8
-	beq	.L58
-.L46:
-	tst	r3, #4
-	bxeq	lr
-	ldr	r3, .L60+4
-	ldrh	r3, [r3]
 	push	{r4, lr}
+	beq	.L44
+	ldr	r2, .L55+4
+	ldrh	r0, [r2]
+	ands	r0, r0, #8
+	beq	.L53
+.L44:
+	tst	r3, #4
+	beq	.L43
+	ldr	r3, .L55+4
+	ldrh	r3, [r3]
 	ands	r4, r3, #4
-	beq	.L59
+	beq	.L54
+.L43:
 	pop	{r4, lr}
 	bx	lr
-.L58:
-	b	goToGame
-.L59:
-	ldr	r3, .L60+8
-	ldr	r0, .L60+12
+.L53:
+	ldr	r3, .L55+8
 	mov	lr, pc
 	bx	r3
-	ldr	r3, .L60+16
+	mov	r2, #1
+	ldr	r3, .L55+12
+	pop	{r4, lr}
+	str	r2, [r3]
+	bx	lr
+.L54:
+	ldr	r3, .L55+8
+	ldr	r0, .L55+16
+	mov	lr, pc
+	bx	r3
+	ldr	r3, .L55+12
 	str	r4, [r3]
 	pop	{r4, lr}
 	bx	lr
-.L61:
+.L56:
 	.align	2
-.L60:
+.L55:
 	.word	oldButtons
 	.word	buttons
 	.word	fillScreen
-	.word	32736
 	.word	state
+	.word	32736
 	.size	pause, .-pause
 	.align	2
 	.global	goToWin
@@ -325,17 +332,17 @@ goToWin:
 	@ frame_needed = 0, uses_anonymous_args = 0
 	mov	r1, #3
 	push	{r4, lr}
-	ldr	r2, .L64
+	ldr	r2, .L59
 	mov	r0, #992
-	ldr	r3, .L64+4
+	ldr	r3, .L59+4
 	str	r1, [r2]
 	mov	lr, pc
 	bx	r3
 	pop	{r4, lr}
 	bx	lr
-.L65:
+.L60:
 	.align	2
-.L64:
+.L59:
 	.word	state
 	.word	fillScreen
 	.size	goToWin, .-goToWin
@@ -349,29 +356,29 @@ win:
 	@ Function supports interworking.
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
-	ldr	r3, .L76
+	ldr	r3, .L71
 	ldrh	r3, [r3]
 	tst	r3, #8
 	bxeq	lr
-	ldr	r3, .L76+4
+	ldr	r3, .L71+4
 	ldrh	r3, [r3]
 	push	{r4, lr}
 	ands	r4, r3, #8
-	beq	.L75
+	beq	.L70
 	pop	{r4, lr}
 	bx	lr
-.L75:
-	ldr	r3, .L76+8
-	ldr	r0, .L76+12
+.L70:
+	ldr	r3, .L71+8
+	ldr	r0, .L71+12
 	mov	lr, pc
 	bx	r3
-	ldr	r3, .L76+16
+	ldr	r3, .L71+16
 	str	r4, [r3]
 	pop	{r4, lr}
 	bx	lr
-.L77:
+.L72:
 	.align	2
-.L76:
+.L71:
 	.word	oldButtons
 	.word	buttons
 	.word	fillScreen
@@ -391,85 +398,71 @@ main:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	mov	r3, #67108864
-	ldr	r2, .L90
+	ldr	r2, .L84
 	push	{r4, r7, fp, lr}
-	ldr	r0, .L90+4
+	ldr	r0, .L84+4
 	strh	r2, [r3]	@ movhi
-	ldr	r3, .L90+8
+	ldr	r3, .L84+8
 	mov	lr, pc
 	bx	r3
-	mov	r2, #0
-	ldr	r6, .L90+12
-	ldr	fp, .L90+16
-	str	r2, [r6]
-	ldrh	r0, [fp]
-	ldr	r5, .L90+20
-	ldr	r8, .L90+24
-	ldr	r10, .L90+28
-	ldr	r9, .L90+32
-	ldr	r7, .L90+36
-	ldr	r4, .L90+40
-.L80:
-	strh	r0, [r5]	@ movhi
+	mov	r3, #0
+	mov	r2, r3
+	ldr	r6, .L84+12
+	ldr	fp, .L84+16
+	str	r3, [r6]
+	ldr	r5, .L84+20
+	ldr	r10, .L84+24
+	ldr	r9, .L84+28
+	ldr	r8, .L84+32
+	ldr	r7, .L84+36
+	ldr	r4, .L84+40
+.L74:
+	ldrh	r3, [fp]
+.L75:
+	strh	r3, [r5]	@ movhi
 	ldrh	r3, [r4, #48]
 	strh	r3, [fp]	@ movhi
 	cmp	r2, #4
 	ldrls	pc, [pc, r2, asl #2]
-	b	.L87
-.L82:
-	.word	.L85
-	.word	.L84
-	.word	.L83
-	.word	.L81
-	.word	.L81
-.L81:
+	b	.L75
+.L77:
+	.word	.L80
+	.word	.L79
+	.word	.L78
+	.word	.L76
+	.word	.L76
+.L76:
 	mov	lr, pc
 	bx	r7
+.L81:
 	ldr	r2, [r6]
-	ldrh	r0, [fp]
-	b	.L80
-.L83:
+	b	.L74
+.L78:
+	mov	lr, pc
+	bx	r8
+	b	.L81
+.L79:
 	mov	lr, pc
 	bx	r9
-	ldr	r2, [r6]
-	ldrh	r0, [fp]
-	b	.L80
-.L84:
+	b	.L81
+.L80:
 	mov	lr, pc
 	bx	r10
-	ldr	r2, [r6]
-	ldrh	r0, [fp]
-	b	.L80
+	b	.L81
 .L85:
-	ldr	ip, [r8]
-	tst	r0, #8
-	add	r0, ip, #1
-	str	r0, [r8]
-	beq	.L87
-	ldr	r3, .L90+44
-	mov	lr, pc
-	bx	r3
-	ldr	r2, [r6]
-	ldrh	r0, [fp]
-	b	.L80
-.L87:
-	mov	r0, r3
-	b	.L80
-.L91:
 	.align	2
-.L90:
+.L84:
 	.word	1027
 	.word	32736
 	.word	fillScreen
 	.word	state
 	.word	buttons
 	.word	oldButtons
-	.word	seed
+	.word	start
 	.word	game
 	.word	pause
 	.word	win
 	.word	67109120
-	.word	start.part.0
 	.size	main, .-main
 	.text
 	.align	2
@@ -484,17 +477,17 @@ goToLose:
 	@ frame_needed = 0, uses_anonymous_args = 0
 	mov	r1, #4
 	push	{r4, lr}
-	ldr	r2, .L94
+	ldr	r2, .L88
 	mov	r0, #31
-	ldr	r3, .L94+4
+	ldr	r3, .L88+4
 	str	r1, [r2]
 	mov	lr, pc
 	bx	r3
 	pop	{r4, lr}
 	bx	lr
-.L95:
+.L89:
 	.align	2
-.L94:
+.L88:
 	.word	state
 	.word	fillScreen
 	.size	goToLose, .-goToLose

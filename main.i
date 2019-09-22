@@ -991,14 +991,15 @@ void goToStart() {
 void start() {
     seed++;
     if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
+        srand(0);
         initGame();
+        srand(seed);
         goToGame();
     }
 }
 
 void goToGame() {
     fillScreen(0);
-    srand(seed);
     state = GAME;
 }
 
